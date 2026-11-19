@@ -15,7 +15,7 @@
 :root{--bg:#FAF3E7;--ink:#1c1c1c;--win:#fff;--bar:#2b2b2d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a2420}}
 *{box-sizing:border-box}html,body{margin:0;height:100%}
-body{background:var(--bg);font-family:Quicksand,system-ui,sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center;padding:12px}
+body{background:var(--bg);font-family:Quicksand,system-ui,sans-serif;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;height:auto;min-height:100%}
 .win{width:min(980px,100%);height:min(720px,94vh);background:#fff;border-radius:12px;box-shadow:0 20px 60px #0004;display:flex;flex-direction:column;overflow:hidden;color:var(--ink)}
 .tb{height:36px;background:#fff;border-bottom:1px solid #e5e0d8;display:flex;align-items:center;padding:0 12px;position:relative;font-size:13px}
 .tb i{width:12px;height:12px;border-radius:50%;margin-right:7px}.tb b{position:absolute;left:0;right:0;text-align:center;font-weight:600}
@@ -107,10 +107,10 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:sepia(
 <div class="row" id="links" style="opacity:0;align-items:center;transition:opacity .6s"><span class="btn" id="lname">you</span><span style="border:1px solid #ccc;background:#fff;border-radius:8px;padding:5px 10px;font-size:12px" id="url"></span><button class="btn" id="cp2">copy</button></div>
 <div class="row"><button class="btn" id="dl2">download</button><button class="btn" id="again">play again</button><button class="btn" id="back3">back</button></div>
 </section>
-<div id="ytwrap" style="position:absolute;right:10px;bottom:10px;z-index:50;width:200px;height:113px;border-radius:10px;overflow:hidden;box-shadow:0 6px 24px #0005;background:#000"><div id="ytplayer"></div></div>
 </div>
 <div class="bar"><div class="ic"><span></span><span></span><span></span></div><div class="rec">📷</div></div>
 </div>
+<div id="ytwrap" style="margin-top:10px;width:200px;height:113px;border-radius:10px;overflow:hidden;box-shadow:0 6px 24px #0005;background:#000;flex:none"><div id="ytplayer"></div></div>
 <script>
 const $=s=>document.querySelector(s),sleep=t=>new Promise(r=>setTimeout(r,t));
 const POSES=["bite your finger","peace sign, or hide your face","lean away, arms crossed","point at the camera and wink","point at yourself, eyebrows raised","shrug under the mistletoe"];
