@@ -77,7 +77,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:sepia(
 <div class="ov" id="mist" style="left:0;right:0;top:0;text-align:center;display:none;color:#fff"><div style="font-size:44px">🌿🔴</div><div class="script" style="font-size:22px;margin-top:-6px">you know the rules...</div></div>
 <div class="ov c" id="hold" style="pointer-events:auto;cursor:pointer;color:#fff;font:600 22px Caveat,cursive;touch-action:none"><span style="background:#0005;padding:8px 18px;border-radius:99px;font-size:26px" id="holdt">hold for the photo booth</span></div>
 <div class="ov c" id="cdw" style="display:none"><div id="cd">3<small>❄</small></div></div>
-<div class="ov" id="poseb" style="left:0;right:0;bottom:48px;text-align:center;color:#fff;display:none"><div style="font-size:12px">pose <span id="pn">1</span> of 6</div><div class="script" style="font-size:36px;font-style:italic" id="pt"></div></div>
+<div class="ov" id="poseb" style="left:0;right:0;bottom:74px;text-align:center;color:#fff;display:none;-webkit-text-stroke:1px #000;text-shadow:0 0 4px rgba(0,0,0,.55),0 1px 2px rgba(0,0,0,.6)"><div style="font-size:12px">pose <span id="pn">1</span> of 6</div><div class="script" style="font-size:36px;font-style:italic" id="pt"></div></div>
 <div class="ov" id="film" style="left:0;right:0;bottom:10px;display:none;justify-content:center;gap:4px"></div>
 <div class="ov" style="left:18px;top:64px;display:flex;gap:6px;align-items:center;pointer-events:auto"><button class="btn" id="songbtn">♪ loading song…</button><input type="file" id="songfile" accept="audio/*" style="display:none"><span style="font-size:11px;color:#fff;text-shadow:0 1px 3px #0009">bpm</span><input class="pill" id="bpm" type="number" value="107" style="width:54px;padding:3px 6px"><span style="font-size:11px;color:#fff;text-shadow:0 1px 3px #0009">start at</span><input class="pill" id="startat" type="number" value="67.22" min="0" style="width:48px;padding:3px 6px"><button class="btn" id="tap">tap tempo</button></div>
 <div style="position:absolute;left:18px;top:100px;font-size:11px;color:#fff;text-shadow:0 1px 3px #0009">♪ heads up: if an ad plays, skip it — the booth starts by itself when the song starts</div>
@@ -213,7 +213,7 @@ async function bootBeat(){
  if(!(await waitContent())){songOK=false;$('#poseb').style.display='none';return boot()}
  pulsing=true;lastBeat=-1;pulseLoop();
  {const t0=aud.currentTime;await sleep(1500);if(ytState===-2||!(aud.currentTime>t0+0.05||ytState===1)){songOK=false;pulsing=false;return boot()}}
- const SHOW=[72.80,75.72,78.55,81.67,85.26,88.66],HIDE=[74.00,76.92,79.75,82.87,86.46,90.20];
+ const SHOW=[72.80,75.72,78.55,81.53,85.26,88.66],HIDE=[74.00,76.92,79.75,82.73,86.46,90.20];
  $('#poseb').style.display='block';
  for(let i=0;i<6;i++){curPose=i;
   $('#pn').textContent=i+1;$('#pt').textContent=POSES[i];$('#mist').style.display=i===5?'block':'none';
