@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<!--
+  Merry Motion - YouTube edition: NO copyrighted audio is included in this file.
+  Music streams from the official Wham! video on YouTube via the YouTube IFrame Player API;
+  YouTube serves the song under its own licences and the file must be hosted on a webpage (https).
+  Original photobooth concept & design: Stella (@stellazhu_) - https://www.instagram.com/reel/Df5FtCZhS4i/
+  Unofficial remake, not affiliated with Stella.
+  Music is added by each user from their own file, on their own device, and never uploaded.
+  "Last Christmas" - Wham! - all rights belong to the respective owners.
+-->
+<html lang="en"><head><meta charset="utf-8"><title>Merry Motion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Quicksand:wght@500;600&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF3E7;--ink:#1c1c1c;--win:#fff;--bar:#2b2b2d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a2420}}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{background:var(--bg);font-family:Quicksand,system-ui,sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center;padding:12px}
+.win{width:min(980px,100%);height:min(720px,94vh);background:#fff;border-radius:12px;box-shadow:0 20px 60px #0004;display:flex;flex-direction:column;overflow:hidden;color:var(--ink)}
+.tb{height:36px;background:#fff;border-bottom:1px solid #e5e0d8;display:flex;align-items:center;padding:0 12px;position:relative;font-size:13px}
+.tb i{width:12px;height:12px;border-radius:50%;margin-right:7px}.tb b{position:absolute;left:0;right:0;text-align:center;font-weight:600}
+.main{flex:1;position:relative;background:#FAF3E7;overflow:hidden;min-height:0}
+.bar{height:58px;background:var(--bar);display:flex;align-items:center;justify-content:center;position:relative}
+.bar .ic{position:absolute;left:14px;display:flex;gap:8px}.bar .ic span{width:16px;height:16px;border:1.5px solid #aaa;border-radius:3px}
+.rec{width:40px;height:40px;border-radius:50%;background:#e5302f;border:3px solid #fff3;color:#fff;display:grid;place-items:center;font-size:17px;cursor:pointer}
+.scr{position:absolute;inset:0;display:none}.scr.on{display:flex}
+#s1{align-items:center;justify-content:center;background:#000}
+video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:sepia(.18) brightness(1.06) saturate(1.05)}
+.ov{position:absolute;pointer-events:none}.ov.c{inset:0;display:grid;place-items:center}
+.pill{pointer-events:auto;background:#fff;border:1px solid #222;border-radius:99px;padding:3px 10px;font:600 12px Quicksand,sans-serif;color:#222;width:96px;text-align:center}
+.btn{background:#fffdf8;border:1px solid #222;border-radius:99px;padding:6px 13px;font:600 12px Quicksand,sans-serif;color:#222;cursor:pointer}
+.btn.k{background:#000;color:#fff}
+.script{font-family:Caveat,cursive}
+#cd{font:700 190px Caveat,cursive;color:#fff;text-shadow:5px 5px 0 #d6283a,-2px -2px 0 #d6283a,4px -3px 0 #d6283a;position:relative}
+#cd small{font-size:46px;position:absolute;right:-40px;top:0;color:#ffb3c7;text-shadow:none}
+#flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .35s}
+.pol{background:#fff;padding:12px 12px 46px;box-shadow:0 8px 30px #0006;transform:rotate(-3deg);position:relative}
+.pol img{display:block;height:min(52vh,380px);aspect-ratio:4/5;object-fit:cover}
+.sp{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 6px 2px #fff8;animation:fl 6s linear infinite;opacity:0}
+@keyframes fl{0%{opacity:0;transform:translateY(0)}20%{opacity:.9}100%{opacity:0;transform:translateY(-60px) translateX(20px)}}
+#fs{position:absolute;inset:0;display:none;place-items:center;background:#000a;z-index:5}
+#s2{flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:10px}
+#strip{max-height:calc(100% - 50px);max-width:100%;box-shadow:0 6px 24px #0003;background:#fff}
+.row{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+#s3{flex-direction:column;align-items:center;justify-content:center;gap:12px;overflow:auto;padding:10px}
+.scene{perspective:1200px;width:420px;height:290px;margin-top:30px;flex:none}
+.env{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 1.1s}
+.env.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden}
+.kraft{background:#b98a5a;background-image:repeating-linear-gradient(45deg,#0000 0 3px,#0000000a 3px 4px)}
+.back{transform:rotateY(180deg);border-radius:4px;overflow:hidden}
+.lining{position:absolute;inset:0;background:#2a8a86 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M12 3l6 9h-4l5 7H5l5-7H6z' fill='%231f5a3a'/%3E%3C/svg%3E")}
+.ph{position:absolute;left:105px;top:-180px;width:210px;transition:top 1.2s ease;transform:rotate(2deg)}
+.ph.in{top:30px}.ph.pol{padding:7px 7px 24px}.ph img{height:auto;width:100%}
+.pocket{position:absolute;inset:0;clip-path:polygon(0 0,50% 52%,100% 0,100% 100%,0 100%);background:#a97b4c}
+.pocket2{position:absolute;inset:0;clip-path:polygon(0 100%,50% 52%,100% 100%);background:#c79a68}
+.flap{position:absolute;left:0;top:0;width:100%;height:175px;transform-origin:top;transform-style:preserve-3d;transition:transform .9s;transform:rotateX(180deg)}
+.flap.shut{transform:rotateX(0)}
+.flap i{position:absolute;inset:0;clip-path:polygon(0 0,100% 0,50% 100%);backface-visibility:hidden;background:#b98a5a}
+.flap i+i{background:#237a76;transform:rotateX(180deg)}
+.tw{font-family:'Special Elite',monospace;font-size:12px}
+.stamp{width:50px;height:62px;padding:4px;background:#fff;position:relative;--g:radial-gradient(circle 3px,#0000 98%,#000);}
+.stamp div{width:100%;height:100%;display:grid;place-items:center;text-align:center;font-size:9px;color:#fff;font-weight:700;line-height:1.1}
+</style></head><body>
+<div class="win">
+<div class="tb"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><b>Merry Motion</b></div>
+<div class="main">
+
+<section class="scr on" id="s1">
+<video id="v" autoplay playsinline muted></video>
+<div class="ov" style="inset:0;overflow:hidden" id="spk"></div>
+<div class="ov script" style="left:18px;top:8px;font-size:44px;color:#ff9ec0" id="toBig">to you</div>
+<div class="ov" style="right:14px;top:12px;display:flex;gap:6px"><input class="pill" id="to" value="to you"><input class="pill" id="from" value="from stella"></div>
+<div class="ov" style="right:14px;top:48px;width:100px;font-size:5px;line-height:1.2;color:#bbb">lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud</div>
+<div class="ov" style="left:14px;bottom:8px;font-size:9px;color:#ccc">record • photo booth • ‘last christmas’ trend • 6 poses • ♥ live strip</div>
+<div class="ov" style="left:60px;top:70px;font-size:20px;color:#f5c542">★</div><div class="ov" style="right:30px;bottom:90px;font-size:18px;color:#fff9">❄ ✦</div>
+<div class="ov" id="mist" style="left:0;right:0;top:0;text-align:center;display:none;color:#fff"><div style="font-size:44px">🌿🔴</div><div class="script" style="font-size:22px;margin-top:-6px">you know the rules...</div></div>
+<div class="ov c" id="hold" style="pointer-events:auto;cursor:pointer;color:#fff;font:600 22px Caveat,cursive;touch-action:none"><span style="background:#0005;padding:8px 18px;border-radius:99px;font-size:26px" id="holdt">hold for the photo booth</span></div>
+<div class="ov c" id="cdw" style="display:none"><div id="cd">3<small>❄</small></div></div>
+<div class="ov" id="poseb" style="left:0;right:0;bottom:48px;text-align:center;color:#fff;display:none"><div style="font-size:12px">pose <span id="pn">1</span> of 6</div><div class="script" style="font-size:36px;font-style:italic" id="pt"></div></div>
+<div class="ov" id="film" style="left:0;right:0;bottom:10px;display:none;justify-content:center;gap:4px"></div>
+<div class="ov" style="left:18px;top:64px;display:flex;gap:6px;align-items:center;pointer-events:auto"><button class="btn" id="songbtn">♪ loading song…</button><input type="file" id="songfile" accept="audio/*" style="display:none"><span style="font-size:11px;color:#fff;text-shadow:0 1px 3px #0009">bpm</span><input class="pill" id="bpm" type="number" value="107" style="width:54px;padding:3px 6px"><span style="font-size:11px;color:#fff;text-shadow:0 1px 3px #0009">start at</span><input class="pill" id="startat" type="number" value="67.22" min="0" style="width:48px;padding:3px 6px"><button class="btn" id="tap">tap tempo</button></div>
+<div id="err" style="position:absolute;inset:0;background:#FAF3E7;color:#222;display:none;place-items:center;text-align:center;padding:30px;font-size:15px">camera access was blocked. allow the camera in your browser, then reload to start the photo booth.</div>
+<div id="flash"></div>
+<div id="fs"><div class="pol" id="polbig"><img id="polimg"></div></div>
+</section>
+
+<section class="scr" id="s2">
+<canvas id="strip"></canvas>
+<div class="row"><button class="btn k" id="seal">seal &amp; send »</button><button class="btn" id="dl">download strip</button><button class="btn" id="shw">show the photos</button><button class="btn" id="dlv">download live strip</button><button class="btn" id="back">back to camera</button></div>
+<div id="show" style="position:absolute;inset:0;background:#000a;display:none;place-items:center;z-index:5"><canvas id="sc" width="600" height="750" style="height:92%;max-width:100%"></canvas></div>
+</section>
+
+<section class="scr" id="s3">
+<div class="scene"><div class="env" id="env">
+<div class="face" id="front"><div class="lining"></div><div class="ph pol" id="ph"><img id="phi"></div><div class="pocket"></div><div class="pocket2"></div><div class="flap" id="flap"><i></i><i></i></div></div>
+<div class="face back kraft" id="bk">
+<div class="tw" style="position:absolute;left:14px;top:14px" id="bfrom">from stella</div>
+<svg style="position:absolute;left:14px;top:34px" width="150" height="60" viewBox="0 0 150 60"><path d="M0 20q10-10 20 0t20 0 20 0 20 0 20 0M0 30q10-10 20 0t20 0 20 0 20 0 20 0" stroke="#4a3320" stroke-opacity=".5" fill="none" stroke-width="1.5"/><circle cx="105" cy="30" r="25" fill="none" stroke="#4a3320" stroke-opacity=".6" stroke-width="1.5"/><path id="cp" d="M105 51a21 21 0 1 1 .1 0" fill="none"/><text font-size="6.5" fill="#4a3320" fill-opacity=".7" font-family="Special Elite"><textPath href="#cp">MERRY MOTION ✦ MERRY MOTION</textPath></text></svg>
+<div style="position:absolute;right:12px;top:12px;display:flex;gap:6px">
+<div class="stamp"><div style="background:#c8302d;border:1px dashed #fff;font-family:Caveat;font-size:13px">☕★<br>stay warm</div></div>
+<div class="stamp"><div style="background:#a99bd6;font-size:13px">🌿<br>70¢</div></div>
+<div class="stamp"><div style="background:#2d7a4b;font-size:13px">🎄<br><span style="font-size:7px">HAPPY HOLIDAYS</span></div></div></div>
+<div style="position:absolute;left:0;right:0;top:150px;text-align:center"><span class="tw">to</span><div class="script" style="font-size:62px;line-height:.9;color:#111;display:inline-block;margin-left:8px;border-bottom:4px solid #d6283a;border-radius:0 0 40% 40%" id="bto">you</div></div>
+</div></div></div>
+<div id="sealed" style="font-size:12px;opacity:0;transition:opacity .6s">sealed, here’s your links</div>
+<div class="row" id="links" style="opacity:0;align-items:center;transition:opacity .6s"><span class="btn" id="lname">you</span><span style="border:1px solid #ccc;background:#fff;border-radius:8px;padding:5px 10px;font-size:12px" id="url"></span><button class="btn" id="cp2">copy</button></div>
+<div class="row"><button class="btn" id="dl2">download</button><button class="btn" id="again">play again</button><button class="btn" id="back3">back</button></div>
+</section>
+<div id="ytwrap" style="position:absolute;right:10px;bottom:10px;z-index:50;width:200px;height:113px;border-radius:10px;overflow:hidden;box-shadow:0 6px 24px #0005;background:#000"><div id="ytplayer"></div></div>
+</div>
+<div class="bar"><div class="ic"><span></span><span></span><span></span></div><div class="rec">📷</div></div>
+</div>
+<script>
+const $=s=>document.querySelector(s),sleep=t=>new Promise(r=>setTimeout(r,t));
+const POSES=["bite your finger","peace sign, or hide your face","lean away, arms crossed","point at the camera and wink","point at yourself, eyebrows raised","shrug under the mistletoe"];
+const CAPS=["the bite","the hide","the lean","the wink","who, me?","the shrug"];
+let photos=[],running=false,card=null,stream;
+const names=()=>({to:($('#to').value.replace(/^to\s+/i,'')||'you').trim()||'you',from:($('#from').value.replace(/^from\s+/i,'')||'stella').trim()||'stella'});
+function show(n){document.querySelectorAll('.scr').forEach(e=>e.classList.remove('on'));$('#s'+n).classList.add('on')}
+for(let i=0;i<22;i++){const s=document.createElement('i');s.className='sp';s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*6}s;animation-duration:${4+Math.random()*4}s`;$('#spk').appendChild(s)}
+$('#to').oninput=()=>{$('#toBig').textContent=$('#to').value||'to you'};
+async function cam(){try{stream=await navigator.mediaDevices.getUserMedia({video:{width:1280,height:720},audio:false});$('#v').srcObject=stream;$('#err').style.display='none'}catch(e){$('#err').style.display='grid'}}
+cam();
+function film(){const f=$('#film');f.innerHTML='';for(let i=0;i<6;i++){const d=document.createElement('div');d.style.cssText='width:38px;height:48px;border:2px solid #fff;background:#0007;color:#fff;font:600 11px Quicksand;display:grid;place-items:center;overflow:hidden';d.textContent=i+1;f.appendChild(d)}f.style.display='flex'}
+// hold to start
+let ht=null;const hold=$('#hold');
+hold.onpointerdown=e=>{if(running||!stream)return;$('#holdt').textContent='keep holding…';if(songOK)startSong();ht=setTimeout(()=>{ht=null;songOK?bootBeat():boot()},700)};
+const rel=()=>{if(ht){clearTimeout(ht);ht=null;$('#holdt').textContent='hold for the photo booth';if(songOK)aud.pause()}};
+hold.onpointerup=hold.onpointerleave=hold.onpointercancel=rel;
+function snap(i){
+ const v=$('#v'),W=600,H=750,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+ let vw=v.videoWidth,vh=v.videoHeight,ch=vh,cw=vh*.8;if(cw>vw){cw=vw;ch=vw/.8}
+ x.save();x.filter='sepia(.18) brightness(1.06) saturate(1.05)';x.translate(W,0);x.scale(-1,1);x.drawImage(v,(vw-cw)/2,(vh-ch)/2,cw,ch,0,0,W,H);x.restore();x.filter='none';
+ if(i===1){x.font='44px serif';[['⭐',60,70],['❄️',150,50],['🔔',40,690],['🎁',520,690],['❄️',540,300],['⭐',30,380]].forEach(([t,a,b])=>x.fillText(t,a,b));x.font='700 54px Caveat';x.fillStyle='#fff';x.strokeStyle='#d6283a';x.lineWidth=6;x.textAlign='right';x.strokeText('Happy Holidays',W-18,50);x.fillText('Happy Holidays',W-18,50)}
+ return c}
+async function boot(){
+ running=true;photos=[];hold.style.display='none';film();$('#poseb').style.display='block';$('#cdw').style.display='grid';
+ for(let i=0;i<6;i++){
+  $('#pn').textContent=i+1;$('#pt').textContent=POSES[i];$('#mist').style.display=i===5?'block':'none';
+  for(let n=3;n>0;n--){$('#cd').firstChild.textContent=n;await sleep(1000)}
+  const f=$('#flash');f.style.transition='none';f.style.opacity=1;requestAnimationFrame(()=>{f.style.transition='opacity .4s';f.style.opacity=0});
+  const c=snap(i);photos.push(c);
+  const slot=$('#film').children[i];slot.innerHTML='';c.style.cssText='width:100%;height:100%;object-fit:cover';slot.appendChild(c.cloneNode()).getContext&&0;
+  slot.innerHTML=`<img src="${c.toDataURL('image/jpeg',.9)}" style="width:100%;height:100%;object-fit:cover">`;
+  $('#cdw').style.display='none';$('#poseb').style.display='none';
+  $('#polimg').src=c.toDataURL('image/jpeg',.9);$('#polbig').style.transform=`rotate(${(i%2?3:-3)}deg)`;$('#fs').style.display='grid';await sleep(1500);$('#fs').style.display='none';
+  if(i<5){$('#cdw').style.display='grid';$('#poseb').style.display='block'}
+ }
+ $('#mist').style.display='none';$('#film').style.display='none';buildCard();show(2);running=false;hold.style.display='grid';$('#holdt').textContent='hold for the photo booth'}
+function buildCard(){
+ const {from}=names(),W=900,P=40,pw=400,ph=500,g=20,H=P+3*ph+2*g+190,c=$('#strip');c.width=W;c.height=H;const x=c.getContext('2d');
+ x.fillStyle='#fff';x.fillRect(0,0,W,H);
+ photos.forEach((p,i)=>{const px=P+(i%2)*(pw+g),py=P+Math.floor(i/2)*(ph+g);x.drawImage(p,px,py,pw,ph);x.font='500 26px Caveat';x.fillStyle='#fff';x.shadowColor='#0008';x.shadowBlur=4;x.textAlign='left';x.fillText(CAPS[i],px+12,py+ph-14);x.shadowBlur=0});
+ const fy=H-80;x.fillStyle='#111';x.font='700 84px Caveat';x.textAlign='left';x.fillText('Last Christmas',P,fy+10);
+ x.font='60px serif';x.fillText('🎀',W/2+150,fy);
+ x.font='500 18px Caveat';x.textAlign='right';x.fillStyle='#444';x.fillText('for you',W-P,fy-26);x.fillText('love, '+from,W-P,fy-4);x.fillText('winter 2025',W-P,fy+18);
+ card=c}
+function dl(href,name){const a=document.createElement('a');a.href=href;a.download=name;a.click()}
+$('#dl').onclick=$('#dl2').onclick=()=>dl(card.toDataURL('image/png'),'last-christmas-strip.png');
+$('#back').onclick=()=>{photos=[];show(1)};
+$('#back3').onclick=()=>{$('#env').classList.remove('flip');show(2)};
+// slideshow
+function drawSlide(x,i){x.fillStyle='#FAF3E7';x.fillRect(0,0,600,750);x.save();x.translate(300,375);x.rotate(-.05);x.shadowColor='#0004';x.shadowBlur=24;x.fillStyle='#fff';x.fillRect(-215,-300,430,590);x.shadowBlur=0;x.drawImage(photos[i],-195,-280,390,487);x.font='500 34px Caveat';x.fillStyle='#333';x.textAlign='center';x.fillText(CAPS[i],0,255);x.restore()}
+async function play(rec){
+ $('#show').style.display='grid';const c=$('#sc'),x=c.getContext('2d');let mr,ch=[];
+ if(songOK)startSong();
+ if(rec){const vs=c.captureStream(30);if(songOK){try{const as=aud.captureStream?aud.captureStream():aud.mozCaptureStream();as.getAudioTracks().forEach(t=>vs.addTrack(t))}catch(e){}}mr=new MediaRecorder(vs,{mimeType:'video/webm'});mr.ondataavailable=e=>ch.push(e.data);mr.start()}
+ for(let i=0;i<6;i++){if(songOK){const b=beatF();while(beatF()-b<2&&!aud.ended){drawSlide(x,i);await sleep(30)}}else{const t=Date.now();while(Date.now()-t<900){drawSlide(x,i);await sleep(60)}}}
+ if(rec){await new Promise(r=>{mr.onstop=r;mr.stop()});dl(URL.createObjectURL(new Blob(ch,{type:'video/webm'})),'last-christmas-live.webm')}
+ if(songOK)aud.pause();
+ $('#show').style.display='none'}
+$('#shw').onclick=()=>play(false);$('#again').onclick=()=>{$('#show').style.display='';$('#s3').appendChild($('#show'));play(false)};
+const canRec=!!(window.MediaRecorder&&HTMLCanvasElement.prototype.captureStream);
+if(!canRec)$('#dlv').style.display='none';$('#dlv').onclick=()=>play(true);
+// music (user's own file only — never uploaded, never leaves the device)
+let songOK=false,songURL=null,ytPlayer=null,ytReady=false,ytState=-1;
+const aud={get currentTime(){try{return ytReady?ytPlayer.getCurrentTime():0}catch(e){return 0}},set currentTime(t){try{if(ytReady)ytPlayer.seekTo(t,true)}catch(e){}},get ended(){return ytState===0},get volume(){try{return ytReady?ytPlayer.getVolume()/100:1}catch(e){return 1}},set volume(v){try{if(ytReady)ytPlayer.setVolume(Math.max(0,Math.min(100,Math.round(v*100))))}catch(e){}},play(){try{if(ytReady)ytPlayer.playVideo()}catch(e){}},pause(){try{if(ytReady)ytPlayer.pauseVideo()}catch(e){}}};
+window.onYouTubeIframeAPIReady=()=>{ytPlayer=new YT.Player('ytplayer',{width:200,height:113,videoId:'E8gmARGvPlI',playerVars:Object.assign({playsinline:1,rel:0},location.origin.indexOf('http')===0?{origin:location.origin}:{}),events:{onReady:()=>{ytReady=true;songOK=true;$('#songbtn').textContent='♪ song ready ✓'},onStateChange:e=>{ytState=e.data},onError:()=>{ytState=-2}}})};
+{const tag=document.createElement('script');tag.src='https://www.youtube.com/iframe_api';document.head.appendChild(tag)}
+$('#songbtn').onclick=()=>{if(ytReady)startSong()};
+let taps=[];$('#tap').onclick=()=>{const t=performance.now();taps=taps.filter(x=>t-x<2000);taps.push(t);if(taps.length>1)$('#bpm').value=Math.round(60000/((taps[taps.length-1]-taps[0])/(taps.length-1)))};
+const startAt=()=>parseFloat($('#startat').value)||0;
+const beatLen=()=>60/(parseFloat($('#bpm').value)||107);
+const beatF=()=>(aud.currentTime-startAt())/beatLen();
+function startSong(){try{aud.currentTime=startAt();aud.volume=1;aud.play()}catch(e){}}
+async function waitBeats(n){const t=Math.floor(beatF())+n;while(beatF()<t&&!aud.ended)await new Promise(r=>requestAnimationFrame(r))}
+async function waitSong(t){while(aud.currentTime<t&&!aud.ended)await new Promise(r=>requestAnimationFrame(r))}
+let pulsing=false,lastBeat=-1,curPose=0,noFlashPulse=false;
+function pulseLoop(){if(!pulsing)return;const b=Math.floor(beatF());if(b!==lastBeat){lastBeat=b;
+ const cd=$('#cd');cd.style.transition='transform .1s';cd.style.transform='scale(1.12)';setTimeout(()=>{cd.style.transform=''},100);
+ if(!noFlashPulse){const fl=$('#flash');fl.style.transition='none';fl.style.opacity=.13;requestAnimationFrame(()=>{fl.style.transition='opacity .3s';fl.style.opacity=0})}noFlashPulse=false;
+ const slot=$('#film').children[curPose];if(slot){slot.style.transition='transform .1s';slot.style.transform='scale(1.18)';setTimeout(()=>{slot.style.transform=''},100)}}
+ requestAnimationFrame(pulseLoop)}
+function fadeOutSong(){if(!songOK)return;const t0=performance.now(),v0=aud.volume;const step=t=>{const k=Math.min(1,(t-t0)/2000);aud.volume=v0*(1-k);if(k<1)requestAnimationFrame(step);else{aud.pause();aud.volume=1}};requestAnimationFrame(step)}
+async function bootBeat(){
+ running=true;photos=[];hold.style.display='none';film();
+ pulsing=true;lastBeat=-1;pulseLoop();
+ {const t0=aud.currentTime;await sleep(1500);if(ytState===-2||!(aud.currentTime>t0+0.05||ytState===1)){songOK=false;pulsing=false;return boot()}}
+ const SHOW=[71.67,74.87,77.93,81.07,84.13,87.53],HIDE=[72.87,76.07,79.13,82.27,85.33,89.07];
+ $('#poseb').style.display='block';
+ for(let i=0;i<6;i++){curPose=i;
+  $('#pn').textContent=i+1;$('#pt').textContent=POSES[i];$('#mist').style.display=i===5?'block':'none';
+  await waitSong(SHOW[i]-1.5);
+  $('#cdw').style.display='grid';
+  $('#cd').firstChild.textContent=3;await waitSong(SHOW[i]-1);
+  $('#cd').firstChild.textContent=2;await waitSong(SHOW[i]-0.5);
+  $('#cd').firstChild.textContent=1;await waitSong(SHOW[i]);
+  noFlashPulse=true;const f=$('#flash');f.style.transition='none';f.style.opacity=1;requestAnimationFrame(()=>{f.style.transition='opacity .4s';f.style.opacity=0});
+  const c=snap(i);photos.push(c);
+  const slot=$('#film').children[i];slot.innerHTML=`<img src="${c.toDataURL('image/jpeg',.9)}" style="width:100%;height:100%;object-fit:cover">`;
+  $('#cdw').style.display='none';$('#poseb').style.display='none';
+  $('#polimg').src=c.toDataURL('image/jpeg',.9);$('#polbig').style.transform=`rotate(${(i%2?3:-3)}deg)`;$('#fs').style.display='grid';await waitSong(HIDE[i]);$('#fs').style.display='none';
+  if(i<5)$('#poseb').style.display='block';
+ }
+ pulsing=false;$('#cd').style.transform='';
+ $('#mist').style.display='none';$('#film').style.display='none';buildCard();show(2);running=false;hold.style.display='grid';$('#holdt').textContent='hold for the photo booth';fadeOutSong()}
+// envelope
+$('#seal').onclick=async()=>{
+ const n=names();$('#bfrom').textContent='from '+n.from;$('#bto').textContent=n.to;$('#lname').textContent=n.to;
+ $('#url').textContent='merrymotion.app/c/'+Math.random().toString(36).slice(2,8);
+ $('#phi').src=photos[0].toDataURL('image/jpeg',.9);
+ ['#ph','#flap'].forEach(s=>$(s).classList.remove('in','shut'));$('#env').classList.remove('flip');$('#sealed').style.opacity=$('#links').style.opacity=0;
+ show(3);await sleep(500);$('#ph').classList.add('in');await sleep(1500);$('#flap').classList.add('shut');await sleep(1100);$('#env').classList.add('flip');await sleep(1200);$('#sealed').style.opacity=$('#links').style.opacity=1};
+$('#cp2').onclick=async()=>{try{await navigator.clipboard.writeText('https://'+$('#url').textContent)}catch(e){}$('#cp2').textContent='copied!';setTimeout(()=>$('#cp2').textContent='copy',1500)};
+</script></body></html>
