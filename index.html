@@ -197,7 +197,7 @@ async function bootBeat(){
  running=true;photos=[];hold.style.display='none';film();
  pulsing=true;lastBeat=-1;pulseLoop();
  {const t0=aud.currentTime;await sleep(1500);if(ytState===-2||!(aud.currentTime>t0+0.05||ytState===1)){songOK=false;pulsing=false;return boot()}}
- const SHOW=[71.67,74.87,77.93,81.07,84.13,87.53],HIDE=[72.87,76.07,79.13,82.27,85.33,89.07];
+ const SHOW=[71.40,74.87,77.93,81.07,84.13,87.53],HIDE=[72.60,76.07,79.13,82.27,85.33,89.07];
  $('#poseb').style.display='block';
  for(let i=0;i<6;i++){curPose=i;
   $('#pn').textContent=i+1;$('#pt').textContent=POSES[i];$('#mist').style.display=i===5?'block':'none';
