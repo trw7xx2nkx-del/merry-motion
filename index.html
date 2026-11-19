@@ -213,7 +213,7 @@ async function bootBeat(){
  if(!(await waitContent())){songOK=false;$('#poseb').style.display='none';return boot()}
  pulsing=true;lastBeat=-1;pulseLoop();
  {const t0=aud.currentTime;await sleep(1500);if(ytState===-2||!(aud.currentTime>t0+0.05||ytState===1)){songOK=false;pulsing=false;return boot()}}
- const SHOW=[72.80,75.80,79.06,82.20,85.26,88.66],HIDE=[74.00,77.00,80.26,83.40,86.46,90.20];
+ const SHOW=[72.80,75.72,79.06,82.20,85.26,88.66],HIDE=[74.00,76.92,80.26,83.40,86.46,90.20];
  $('#poseb').style.display='block';
  for(let i=0;i<6;i++){curPose=i;
   $('#pn').textContent=i+1;$('#pt').textContent=POSES[i];$('#mist').style.display=i===5?'block':'none';
