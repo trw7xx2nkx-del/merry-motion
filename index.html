@@ -176,7 +176,7 @@ const canRec=!!(window.MediaRecorder&&HTMLCanvasElement.prototype.captureStream)
 if(!canRec)$('#dlv').style.display='none';$('#dlv').onclick=()=>play(true);
 // music (user's own file only — never uploaded, never leaves the device)
 let songOK=false,songURL=null,ytPlayer=null,ytReady=false,ytState=-1,CONTENT_DUR=0;
-const aud={get currentTime(){try{return ytReady?ytPlayer.getCurrentTime():0}catch(e){return 0}},set currentTime(t){try{if(ytReady)ytPlayer.seekTo(t,true)}catch(e){}},get duration(){try{return ytReady?ytPlayer.getDuration():0}catch(e){return 0}},get ended(){return ytState===0},get volume(){try{return ytReady?ytPlayer.getVolume()/100:1}catch(e){return 1}},set volume(v){try{if(ytReady)ytPlayer.setVolume(Math.max(0,Math.min(100,Math.round(v*100))))}catch(e){}},play(){try{if(ytReady)ytPlayer.playVideo()}catch(e){}},pause(){try{if(ytReady)ytPlayer.pauseVideo()}catch(e){}}};
+let _lt=-1,_lts=0;const aud={get rawTime(){try{return ytReady?ytPlayer.getCurrentTime():0}catch(e){return 0}},get currentTime(){const v=this.rawTime,now=performance.now();if(_lt<0||Math.abs(v-_lt)>0.001){_lt=v;_lts=now;return v}if(ytState===1)return _lt+(now-_lts)/1000;return _lt},set currentTime(t){try{if(ytReady)ytPlayer.seekTo(t,true)}catch(e){}},get duration(){try{return ytReady?ytPlayer.getDuration():0}catch(e){return 0}},get ended(){return ytState===0},get volume(){try{return ytReady?ytPlayer.getVolume()/100:1}catch(e){return 1}},set volume(v){try{if(ytReady)ytPlayer.setVolume(Math.max(0,Math.min(100,Math.round(v*100))))}catch(e){}},play(){try{if(ytReady)ytPlayer.playVideo()}catch(e){}},pause(){try{if(ytReady)ytPlayer.pauseVideo()}catch(e){}}};
 window.onYouTubeIframeAPIReady=()=>{ytPlayer=new YT.Player('ytplayer',{width:200,height:113,videoId:'E8gmARGvPlI',playerVars:Object.assign({playsinline:1,rel:0},location.origin.indexOf('http')===0?{origin:location.origin}:{}),events:{onReady:()=>{ytReady=true;songOK=true;$('#songbtn').textContent='♪ song ready ✓';const iv=setInterval(()=>{const d=aud.duration;if(d>0){CONTENT_DUR=d;clearInterval(iv)}},300)},onStateChange:e=>{ytState=e.data},onError:()=>{ytState=-2}}})};
 {const tag=document.createElement('script');tag.src='https://www.youtube.com/iframe_api';document.head.appendChild(tag)}
 $('#songbtn').onclick=()=>{if(ytReady)startSong()};
@@ -195,10 +195,10 @@ function pulseLoop(){if(!pulsing)return;const b=Math.floor(beatF());if(b!==lastB
  requestAnimationFrame(pulseLoop)}
 function fadeOutSong(){if(!songOK)return;const t0=performance.now(),v0=aud.volume;const step=t=>{const k=Math.min(1,(t-t0)/2000);aud.volume=v0*(1-k);if(k<1)requestAnimationFrame(step);else{aud.pause();aud.volume=1}};requestAnimationFrame(step)}
 async function waitContent(){
- const t0=Date.now();let lastT=aud.currentTime,lastAdv=Date.now(),adv=0;
+ const t0=Date.now();let lastT=aud.rawTime,lastAdv=Date.now(),adv=0;
  while(Date.now()-t0<90000){
   if(ytState===-2)return false;
-  const d=aud.duration,ct=aud.currentTime;
+  const d=aud.duration,ct=aud.rawTime;
   if(ct>lastT+0.02){adv+=ct-lastT;lastT=ct;lastAdv=Date.now()}
   const durOK=d>0&&(CONTENT_DUR>0?Math.abs(d-CONTENT_DUR)<=2:d>200);
   if(durOK&&adv>0.15){$('#pt').textContent='';return true}
