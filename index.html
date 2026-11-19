@@ -80,6 +80,7 @@ video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:sepia(
 <div class="ov" id="poseb" style="left:0;right:0;bottom:48px;text-align:center;color:#fff;display:none"><div style="font-size:12px">pose <span id="pn">1</span> of 6</div><div class="script" style="font-size:36px;font-style:italic" id="pt"></div></div>
 <div class="ov" id="film" style="left:0;right:0;bottom:10px;display:none;justify-content:center;gap:4px"></div>
 <div class="ov" style="left:18px;top:64px;display:flex;gap:6px;align-items:center;pointer-events:auto"><button class="btn" id="songbtn">♪ loading song…</button><input type="file" id="songfile" accept="audio/*" style="display:none"><span style="font-size:11px;color:#fff;text-shadow:0 1px 3px #0009">bpm</span><input class="pill" id="bpm" type="number" value="107" style="width:54px;padding:3px 6px"><span style="font-size:11px;color:#fff;text-shadow:0 1px 3px #0009">start at</span><input class="pill" id="startat" type="number" value="67.22" min="0" style="width:48px;padding:3px 6px"><button class="btn" id="tap">tap tempo</button></div>
+<div style="position:absolute;left:18px;top:100px;font-size:11px;color:#fff;text-shadow:0 1px 3px #0009">♪ heads up: if an ad plays, skip it — the booth starts by itself when the song starts</div>
 <div id="err" style="position:absolute;inset:0;background:#FAF3E7;color:#222;display:none;place-items:center;text-align:center;padding:30px;font-size:15px">camera access was blocked. allow the camera in your browser, then reload to start the photo booth.</div>
 <div id="flash"></div>
 <div id="fs"><div class="pol" id="polbig"><img id="polimg"></div></div>
@@ -174,9 +175,9 @@ $('#shw').onclick=()=>play(false);$('#again').onclick=()=>{$('#show').style.disp
 const canRec=!!(window.MediaRecorder&&HTMLCanvasElement.prototype.captureStream);
 if(!canRec)$('#dlv').style.display='none';$('#dlv').onclick=()=>play(true);
 // music (user's own file only — never uploaded, never leaves the device)
-let songOK=false,songURL=null,ytPlayer=null,ytReady=false,ytState=-1;
-const aud={get currentTime(){try{return ytReady?ytPlayer.getCurrentTime():0}catch(e){return 0}},set currentTime(t){try{if(ytReady)ytPlayer.seekTo(t,true)}catch(e){}},get ended(){return ytState===0},get volume(){try{return ytReady?ytPlayer.getVolume()/100:1}catch(e){return 1}},set volume(v){try{if(ytReady)ytPlayer.setVolume(Math.max(0,Math.min(100,Math.round(v*100))))}catch(e){}},play(){try{if(ytReady)ytPlayer.playVideo()}catch(e){}},pause(){try{if(ytReady)ytPlayer.pauseVideo()}catch(e){}}};
-window.onYouTubeIframeAPIReady=()=>{ytPlayer=new YT.Player('ytplayer',{width:200,height:113,videoId:'E8gmARGvPlI',playerVars:Object.assign({playsinline:1,rel:0},location.origin.indexOf('http')===0?{origin:location.origin}:{}),events:{onReady:()=>{ytReady=true;songOK=true;$('#songbtn').textContent='♪ song ready ✓'},onStateChange:e=>{ytState=e.data},onError:()=>{ytState=-2}}})};
+let songOK=false,songURL=null,ytPlayer=null,ytReady=false,ytState=-1,CONTENT_DUR=0;
+const aud={get currentTime(){try{return ytReady?ytPlayer.getCurrentTime():0}catch(e){return 0}},set currentTime(t){try{if(ytReady)ytPlayer.seekTo(t,true)}catch(e){}},get duration(){try{return ytReady?ytPlayer.getDuration():0}catch(e){return 0}},get ended(){return ytState===0},get volume(){try{return ytReady?ytPlayer.getVolume()/100:1}catch(e){return 1}},set volume(v){try{if(ytReady)ytPlayer.setVolume(Math.max(0,Math.min(100,Math.round(v*100))))}catch(e){}},play(){try{if(ytReady)ytPlayer.playVideo()}catch(e){}},pause(){try{if(ytReady)ytPlayer.pauseVideo()}catch(e){}}};
+window.onYouTubeIframeAPIReady=()=>{ytPlayer=new YT.Player('ytplayer',{width:200,height:113,videoId:'E8gmARGvPlI',playerVars:Object.assign({playsinline:1,rel:0},location.origin.indexOf('http')===0?{origin:location.origin}:{}),events:{onReady:()=>{ytReady=true;songOK=true;$('#songbtn').textContent='♪ song ready ✓';const iv=setInterval(()=>{const d=aud.duration;if(d>0){CONTENT_DUR=d;clearInterval(iv)}},300)},onStateChange:e=>{ytState=e.data},onError:()=>{ytState=-2}}})};
 {const tag=document.createElement('script');tag.src='https://www.youtube.com/iframe_api';document.head.appendChild(tag)}
 $('#songbtn').onclick=()=>{if(ytReady)startSong()};
 let taps=[];$('#tap').onclick=()=>{const t=performance.now();taps=taps.filter(x=>t-x<2000);taps.push(t);if(taps.length>1)$('#bpm').value=Math.round(60000/((taps[taps.length-1]-taps[0])/(taps.length-1)))};
@@ -193,8 +194,21 @@ function pulseLoop(){if(!pulsing)return;const b=Math.floor(beatF());if(b!==lastB
  const slot=$('#film').children[curPose];if(slot){slot.style.transition='transform .1s';slot.style.transform='scale(1.18)';setTimeout(()=>{slot.style.transform=''},100)}}
  requestAnimationFrame(pulseLoop)}
 function fadeOutSong(){if(!songOK)return;const t0=performance.now(),v0=aud.volume;const step=t=>{const k=Math.min(1,(t-t0)/2000);aud.volume=v0*(1-k);if(k<1)requestAnimationFrame(step);else{aud.pause();aud.volume=1}};requestAnimationFrame(step)}
+async function waitContent(){
+ const t0=Date.now();
+ while(Date.now()-t0<90000){
+  if(ytState===-2)return false;
+  const d=aud.duration;
+  if(d>0&&(CONTENT_DUR>0?Math.abs(d-CONTENT_DUR)<=2:d>200)){$('#pt').textContent='';return true}
+  if(d>0)$('#pt').textContent='ad playing — skip it ♪ the booth starts when the song starts';
+  await sleep(250);
+ }
+ return false;
+}
 async function bootBeat(){
  running=true;photos=[];hold.style.display='none';film();
+ $('#poseb').style.display='block';$('#pn').textContent='';$('#pt').textContent='';
+ if(!(await waitContent())){songOK=false;$('#poseb').style.display='none';return boot()}
  pulsing=true;lastBeat=-1;pulseLoop();
  {const t0=aud.currentTime;await sleep(1500);if(ytState===-2||!(aud.currentTime>t0+0.05||ytState===1)){songOK=false;pulsing=false;return boot()}}
  const SHOW=[71.40,74.87,77.93,81.07,84.13,87.53],HIDE=[72.60,76.07,79.13,82.27,85.33,89.07];
