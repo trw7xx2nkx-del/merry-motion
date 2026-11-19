@@ -195,12 +195,14 @@ function pulseLoop(){if(!pulsing)return;const b=Math.floor(beatF());if(b!==lastB
  requestAnimationFrame(pulseLoop)}
 function fadeOutSong(){if(!songOK)return;const t0=performance.now(),v0=aud.volume;const step=t=>{const k=Math.min(1,(t-t0)/2000);aud.volume=v0*(1-k);if(k<1)requestAnimationFrame(step);else{aud.pause();aud.volume=1}};requestAnimationFrame(step)}
 async function waitContent(){
- const t0=Date.now();
+ const t0=Date.now();let lastT=aud.currentTime,lastAdv=Date.now(),adv=0;
  while(Date.now()-t0<90000){
   if(ytState===-2)return false;
-  const d=aud.duration;
-  if(d>0&&(CONTENT_DUR>0?Math.abs(d-CONTENT_DUR)<=2:d>200)){$('#pt').textContent='';return true}
-  if(d>0)$('#pt').textContent='ad playing — skip it ♪ the booth starts when the song starts';
+  const d=aud.duration,ct=aud.currentTime;
+  if(ct>lastT+0.02){adv+=ct-lastT;lastT=ct;lastAdv=Date.now()}
+  const durOK=d>0&&(CONTENT_DUR>0?Math.abs(d-CONTENT_DUR)<=2:d>200);
+  if(durOK&&adv>0.15){$('#pt').textContent='';return true}
+  if((d>0&&!durOK)||(ytState===1&&Date.now()-lastAdv>2500))$('#pt').textContent='waiting for the song — if an ad is playing, skip it ♪ the booth starts by itself';
   await sleep(250);
  }
  return false;
