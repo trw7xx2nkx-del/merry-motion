@@ -157,8 +157,8 @@ function buildCard(){
  x.font='60px serif';x.fillText('🎀',W/2+150,fy);
  x.font='500 18px Caveat';x.textAlign='right';x.fillStyle='#444';x.fillText('for you',W-P,fy-26);x.fillText('love, '+from,W-P,fy-4);x.fillText('winter 2025',W-P,fy+18);
  card=c}
-function dl(href,name){const a=document.createElement('a');a.href=href;a.download=name;a.click()}
-$('#dl').onclick=$('#dl2').onclick=()=>dl(card.toDataURL('image/png'),'last-christmas-strip.png');
+function dl(href,name){const a=document.createElement('a');a.href=href;a.download=name;document.body.appendChild(a);a.click();a.remove()}
+$('#dl').onclick=$('#dl2').onclick=()=>{card.toBlob(b=>{const u=URL.createObjectURL(b);dl(u,'last-christmas-strip.png');setTimeout(()=>URL.revokeObjectURL(u),4000)})};
 $('#back').onclick=()=>{photos=[];show(1)};
 $('#back3').onclick=()=>{$('#env').classList.remove('flip');show(2)};
 // slideshow
